@@ -9,17 +9,16 @@ class NewsController
     {
         $items = News::getAll();
         $view = new View();
-        $view->assign('items', $items);
+        $view->items = $items;//создаем свойство items для объекта $view в рантайме - метод __set() в классе View
         $view->display('news/all.php');
     }
 
     public function actionOne()
     {
-
         $id = $_GET['id'];
         $item = News::getOne($id);
         $view = new View();
-        $view->assign('item', $item);
+        $view->item = $item;
         $view->display('news/one.php');
     }
 
