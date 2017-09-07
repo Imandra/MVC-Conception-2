@@ -6,7 +6,6 @@
  */
 class View
 {
-
     protected $data = [];
 
     public function __set($k, $v)

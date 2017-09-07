@@ -1,22 +1,52 @@
 <?php
 
 abstract class AbstractModel
-    implements IModel
 {
-    protected static $table;
-    protected static $class;
+    static protected $table;
 
-    public static function getAll()
+    protected $data = [];
+
+    public function __set($k, $v)
     {
-        $db = new DB();
-        $sql = 'SELECT * FROM ' . static::$table;
-        return $db->queryAll($sql, static::$class);
+        $this->data[$k] = $v;
     }
 
-    public static function getOne($id)
+    public function __get($k)
     {
+        return $this->data[$k];
+    }
+
+    public static function findAll()
+    {
+        $class = get_called_class();
+        $sql = 'SELECT * FROM ' . static::$table;
         $db = new DB();
-        $sql = 'SELECT * FROM '. static::$table .' WHERE id= ' . $id;
-        return $db->queryOne($sql, static::$class);
+        $db->setClassName($class);
+        return $db->query($sql);
+    }
+
+    public static function findOneByPk($id)
+    {
+        $class = get_called_class();
+        $sql = 'SELECT * FROM ' . static::$table . ' WHERE id=:id';
+        $db = new DB();
+        $db->setClassName($class);
+        return $db->query($sql, [':id' => $id])[0];
+    }
+
+    public function insert()
+    {
+        $cols = array_keys($this->data);
+        $data = [];
+        foreach ($cols as $col) {
+            $data[':' . $col] = $this->data[$col];
+        }
+        $sql = '
+          INSERT INTO ' . static::$table . ' 
+          (' . implode(', ', $cols) . ') 
+          VALUES (' . implode(', ', array_keys($data)) . ') 
+        ';
+        $db = new DB();
+        $db->execute($sql, $data);
     }
 }
