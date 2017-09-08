@@ -1,8 +1,10 @@
 <?php
 
 /**
- * @property array|bool items
- * @property mixed item
+ * class View
+ * @property $items
+ * @property $item
+ * @property $error
  */
 class View
 {
