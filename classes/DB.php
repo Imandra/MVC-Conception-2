@@ -7,7 +7,7 @@ class DB
 
     public function __construct()
     {
-        $this->dbh = new PDO('mysql:dbname=test;host=localhost;', 'root', 'sf2015');
+        $this->dbh = new PDO('mysql:dbname=test;host=localhost;', 'root', '');
     }
 
     public function setClassName($className)
